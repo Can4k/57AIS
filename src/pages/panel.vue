@@ -217,7 +217,7 @@ export default {
     },
 
     async getTeamList() {
-      let res = await fetch('https://eater57.projectoria.ru/teams', {
+      let res = await fetch('https://back.is57.ru/teams', {
         mode: "cors"
       });
       if (res.ok) {
@@ -229,7 +229,7 @@ export default {
     },
 
     async getTaskList() {
-      let res = await fetch('https://eater57.projectoria.ru/tasks', {
+      let res = await fetch('https://back.is57.ru/tasks', {
         mode: "cors"
       });
       if (res.ok) {
@@ -241,7 +241,7 @@ export default {
     },
 
     async getResultList() {
-      let res = await fetch('https://eater57.projectoria.ru/results', {
+      let res = await fetch('https://back.is57.ru/results', {
         mode: "cors"
       });
       if (res.ok) {
@@ -253,7 +253,7 @@ export default {
     },
 
     async post_data() {
-      let res = await fetch(`https://eater57.projectoria.ru/date/set?token=${this.token}&value=${this.new_data_val}`);
+      let res = await fetch(`https://back.is57.ru/date/set?token=${this.token}&value=${this.new_data_val}`);
       if (await res.text() !== 'invalid token') {
         this.new_data_val = '';
       } else {
@@ -278,7 +278,7 @@ export default {
           return;
         }
       }
-      let res = await fetch(`https://eater57.projectoria.ru/teams/add?building=${building}&name=${name}&token=${this.token}`);
+      let res = await fetch(`https://back.is57.ru/teams/add?building=${building}&name=${name}&token=${this.token}`);
       if (await res.text() !== 'invalid token') {
         this.new_team_name = "";
         this.new_team_building = "";
@@ -342,7 +342,7 @@ export default {
       }
       this.remove_team_building = "";
       this.remove_team_name = "";
-      let res = await fetch(`https://eater57.projectoria.ru/teams/del?token=${this.token}&id=${id}`);
+      let res = await fetch(`https://back.is57.ru/teams/del?token=${this.token}&id=${id}`);
       if (await res.text() !== 'invalid token') {
         this.remove_team_name = "";
         this.remove_team_building = "";
@@ -377,7 +377,7 @@ export default {
       let task_name = this.new_task_name;
       this.new_task_name = "";
       this.new_task_subject = "";
-      let res = await fetch(`https://eater57.projectoria.ru/tasks/add?subject=${task_sub}&name=${task_name}&token=${this.token}`);
+      let res = await fetch(`https://back.is57.ru/tasks/add?subject=${task_sub}&name=${task_name}&token=${this.token}`);
       if (await res.text() !== 'invalid token') {
         this.new_task_name = "";
         this.new_task_subject = "";
@@ -408,7 +408,7 @@ export default {
           break;
         }
       }
-      let res = await fetch(`https://eater57.projectoria.ru/tasks/del?id=${id}&token=${this.token}`);
+      let res = await fetch(`https://back.is57.ru/tasks/del?id=${id}&token=${this.token}`);
       if (await res.text() !== 'invalid token') {
         this.remove_task_name = "";
         this.remove_task_subject = "";
@@ -428,7 +428,7 @@ export default {
     },
 
     async get_smart_result(team_id, task_id) {
-      let total = await fetch('https://eater57.projectoria.ru/results');
+      let total = await fetch('https://back.is57.ru/results');
       if (!total.ok) {
         return 0;
       }
@@ -469,7 +469,7 @@ export default {
       this.update_team_name = "";
       this.update_task_name = "";
       val += await this.get_smart_result(team_id, task_id);
-      let res = await fetch(`https://eater57.projectoria.ru/results/set?token=${this.token}&team_id=${team_id}&task_id=${task_id}&value=${val}`);
+      let res = await fetch(`https://back.is57.ru/results/set?token=${this.token}&team_id=${team_id}&task_id=${task_id}&value=${val}`);
       this.results = await this.getResultList();
       this.rebuild(this.results);
       if (await res.text() !== 'invalid token') {
@@ -508,7 +508,7 @@ export default {
 
     async update_element(team_id, task_id, val) {
       let flag = false;
-      let res = await fetch(`https://eater57.projectoria.ru/results/set?token=${this.token}&team_id=${team_id}&task_id=${task_id}&value=${val}`);
+      let res = await fetch(`https://back.is57.ru/results/set?token=${this.token}&team_id=${team_id}&task_id=${task_id}&value=${val}`);
       if (await res.text() === 'invalid token') {
         alert('Неверный токен');
         flag = true;
