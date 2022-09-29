@@ -64,7 +64,7 @@
                   <input type="number" v-if="this.resultsTable.length >= i && this.resultsTable[0].length >= j"
                          v-model="this.resultsTable[i - 1][j - 1]" class="item">
                   <button @click="update_element(teams[j - 1].id, tasks[i - 1].id, this.resultsTable[i - 1][j - 1])"
-                          v-if="this.resultsTable.length && this.resultsTable[0].length && this.copyResultsTable[i - 1][j - 1] !== this.resultsTable[i - 1][j - 1]">
+                          v-if="this.resultsTable.length >= i && this.resultsTable[0].length >= j && this.copyResultsTable[i - 1][j - 1] !== this.resultsTable[i - 1][j - 1]">
                     ОК
                   </button>
                 </div>
@@ -177,13 +177,20 @@ export default {
       resultsTable: [[]],
       copyResultsTable: [[]],
       subjects: [
-        'математика',
-        'русский язык',
-        'история',
-        'информатика',
+          'биология',
+          'география',
+          'информатика',
+          'история',
+          'лингвистика',
+          'литература',
+          'математика',
+          'мхк',
+          'физика',
+          'химия',
+          'экономика',
       ],
       buildings: [
-        1, 2, 3
+        1, 3
       ],
       isTokenHidden: true,
 
@@ -273,8 +280,8 @@ export default {
       this.new_team_building = "";
       let check_res = await this.getTeamList();
       for (let i of check_res) {
-        if (i.name === name && i.building === +building) {
-          alert('В одном отделении не может быть двух команд с одинаковым названием')
+        if (i.name === name) {
+          alert('Не может быть двух команд с одинаковым названием')
           return;
         }
       }
@@ -326,8 +333,8 @@ export default {
     },
 
     async remove_team() {
-      if (!this.token || !this.remove_team_building || !this.remove_team_name) {
-        alert('Вы не выбрали отделение, или не ввели токен, или не ввели название')
+      if (!this.token || !this.remove_team_name || !this.remove_team_building) {
+        alert('Вы не ввели токен или не ввели название')
         return;
       }
       let id = -1;
@@ -369,7 +376,7 @@ export default {
       }
       for (let i of this.tasks) {
         if (i.name === this.new_task_name && i.subject === this.new_task_subject) {
-          alert('По одному предмету не может быть двух одинаковых по названию заданий')
+          alert('Не может быть двух одинаковых по названию заданий')
           return;
         }
       }
@@ -398,7 +405,7 @@ export default {
 
     async remove_task() {
       if (!this.token || !this.remove_task_name || !this.remove_task_subject) {
-        alert('Вы не выбрали предмет, или не ввели токен, или не ввели название');
+        alert('Вы не ввели токен или не ввели название');
         return;
       }
       let id = -1;
@@ -458,12 +465,16 @@ export default {
     },
 
     async updateResult() {
-      if (!this.token || !this.update_balance || !this.update_subject || !this.update_building || !this.update_team_name || !this.update_task_name) {
+      if (!this.token || !this.update_balance || !this.update_team_name || !this.update_task_name || !this.update_subject || !this.update_building) {
         alert('Вы что-то забыли указать (возможно токен)');
         return;
       }
       let team_id = this.get_team_id(this.update_building, this.update_team_name);
       let task_id = this.get_task_id(this.update_subject, this.update_task_name);
+      if (!team_id || !task_id) {
+        alert('Что-то не так');
+        return;
+      }
       let val = +this.update_balance;
       this.update_balance = "";
       this.update_team_name = "";
