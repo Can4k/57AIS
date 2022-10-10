@@ -1,5 +1,64 @@
 <template>
   <div class="cont">
+    <div class="display-block" v-show="isInstructionOpen">
+      <div class="help-cont">
+        <h2>🌈Инструкция🌈</h2>
+        <p>Основной сайт находится на <a href="https://is57.ru">is57.ru</a></p>
+
+        <p>Панель администраторов находится на сайте <a href="https://admin.is57.ru">admin.is57.ru</a>.
+        Для его использования нужен админский токен, который мы будем менять почти каждый день, спросить его можно в IT-department.
+        <strong>При вставке токена  не забудьте нажать кнопку “записать”</strong>.
+        </p>
+
+        <p>Далее  идут несколько очень важных пунктов.</p>
+
+        <p>
+          <strong>0. ПЕРЕД ЛЮБЫМИ ИЗМЕНЕНИЯМИ СТОИТ НАЖИМАТЬ КНОПКУ «ОБНОВИТЬ» (Это поможет избежать возможных коллизий)</strong>
+        </p>
+
+        <div class="text-inner">
+          <strong>Перед началом:</strong>
+          <p>
+            1. Перед началом олимпиады надо будет зарегистрировать команды через меню “Добавить команду”. Название класса писать в начало названия.
+            <strong>Пример: 10И. Кукареку.</strong>
+            Если была совершена ошибка, то аналогичным меню ее надо будет удалить
+          </p>
+          <p>
+            2. Также надо будет добавить задачи через соответствующую панель. Название произвольное, мы точно не знали, как будет устроена олимпиада, поэтому можно называть как “1”, “2”, “3”…. или “A”, “B”, “C”, …, так и “кролики”, “поросята” ну или на что хватит воображения составителей. Аналогично, задачи можно удалять, если была допущена опечатка.
+            <strong>Названия задач до 50 символов. </strong> Если надо увеличить эти ограничения, то пишите в IT-department.
+          </p>
+        </div>
+
+        <strong>Проверяющим:</strong>
+        <p>
+          3.1 Использовать меню “Прибавить баллы команде”
+          выбираете ваше здание, название команды, а также предмет и само принятое задание. Далее добавляете количество баллов в соответствии с указаниями составителей. Ошиблись? <strong>Можно добавлять отрицательное число баллов.</strong>
+        </p>
+        <p>
+          3.2 Мы настоятельно советуем взять ноутбук (может школьный) и использовать для зачисления баллов таблицу, которая расположена чуть ниже. Так будет в разы удобнее и понятнее. Но мы понимаем, что большая часть все равно будет принимать с телефонов, так что от меню выше мы не отказались.
+          Изменения будут учтены в таблице лидеров, она будет на главном сайте.
+        </p>
+        <p>
+          <strong>4. Не вводите большие числа (больше миллиона не надо, хотя вам и не нужно)</strong>
+        </p>
+        <p>
+          <strong>5. Ни в коем случае не трогать любые другие панели 💥</strong>
+        </p>
+        <p>
+          <strong>6. Общее замечание: не тыкайте много раз подряд на кнопки, подождите.</strong>
+        </p>
+        <h3 style="text-align: left;">Если что-то пошло не так, незамедлительно обращайтесь к разработчикам: </h3>
+        <p style="display: flex; flex-direction: column">
+          <a href="https://t.me/Can4k" class="kek">@Can4k - Саша</a>
+          <a href="https://t.me/CHUBBY_D" class="kek">@CHUBBY_D - Илья</a>
+          <a href="https://t.me/whotegsthatdies" class="kek">@whotegsthatdies - Даня</a>
+        </p>
+        <button @click="close_instruction">Закрыть</button>
+      </div>
+    </div>
+    <div class="help">
+      <button @click="open_instruction">Инструкция</button>
+    </div>
     <h1 class="header">Панель управления</h1>
     <div class="field">
       <b>Токен</b>
@@ -64,7 +123,9 @@
                   <input type="number" v-if="this.resultsTable.length >= i && this.resultsTable[0].length >= j"
                          v-model="this.resultsTable[i - 1][j - 1]" class="item">
                   <button @click="update_element(teams[j - 1].id, tasks[i - 1].id, this.resultsTable[i - 1][j - 1])"
-                          v-if="this.resultsTable.length >= i && this.resultsTable[0].length >= j && this.copyResultsTable[i - 1][j - 1] !== this.resultsTable[i - 1][j - 1]">
+                          v-if="
+                          this.resultsTable.length >= i && this.resultsTable[0].length >= j &&
+                          (this.copyResultsTable[i - 1][j - 1] !== this.resultsTable[i - 1][j - 1])">
                     ОК
                   </button>
                 </div>
@@ -177,21 +238,23 @@ export default {
       resultsTable: [[]],
       copyResultsTable: [[]],
       subjects: [
-          'биология',
-          'география',
-          'информатика',
-          'история',
-          'лингвистика',
-          'литература',
-          'математика',
-          'мхк',
-          'физика',
-          'химия',
-          'экономика',
+        'биология',
+        'география',
+        'информатика',
+        'история',
+        'лингвистика',
+        'литература',
+        'математика',
+        'мхк',
+        'физика',
+        'химия',
+        'экономика',
       ],
       buildings: [
         1, 3
       ],
+      legalSymbols: [' ', '-'],
+
       isTokenHidden: true,
 
       new_data_val: "",
@@ -214,10 +277,22 @@ export default {
       update_task_name: "",
       update_balance: "",
 
-      show_table: false
+      show_table: false,
+      isInstructionOpen: false,
     }
   },
   methods: {
+    open_instruction() {
+      this.isInstructionOpen = true;
+      document.body.style.overflow = 'hidden';
+      localStorage['passed'] = 'true';
+    },
+
+    close_instruction() {
+      this.isInstructionOpen = false;
+      document.body.style.overflow = 'auto';
+    },
+
     write_token() {
       this.isTokenHidden = true;
       localStorage['token'] = this.token;
@@ -270,6 +345,12 @@ export default {
 
     async add_team() {
       this.new_team_name = this.new_team_name.trim();
+      for (let c of this.new_team_name) {
+        if (this.legalSymbols.indexOf(c) === -1) {
+          alert('Имя команды может содержать только маленькие и большие латинские буквы, буквы кириллицы, а также цифры, тире и пробел.')
+          return;
+        }
+      }
       if (!this.token || !this.new_team_name || !this.new_team_building) {
         alert('Вы не выбрали отделение, или не ввели токен, или не ввели название')
         return;
@@ -370,12 +451,18 @@ export default {
 
     async add_task() {
       this.new_task_name = this.new_task_name.trim();
+      for (let c of this.new_task_name) {
+        if (this.legalSymbols.indexOf(c) === -1) {
+          alert('Имя команды может содержать только маленькие и большие латинские буквы, буквы кириллицы, а также цифры, тире и пробел.')
+          return;
+        }
+      }
       if (!this.token || !this.new_task_subject || !this.new_task_name) {
         alert('Вы не выбрали предмет, или не ввели токен, или не ввели название');
         return;
       }
       for (let i of this.tasks) {
-        if (i.name === this.new_task_name && i.subject === this.new_task_subject) {
+        if (i.name === this.new_task_name) {
           alert('Не может быть двух одинаковых по названию заданий')
           return;
         }
@@ -499,6 +586,10 @@ export default {
         for (let i = 0; i < height; i++) {
           this.resultsTable[i] = new Array(width);
           this.copyResultsTable[i] = new Array(width);
+          for (let j = 0; j < width; j++) {
+            this.resultsTable[i][j] = '';
+            this.copyResultsTable[i][j] = '';
+          }
         }
         let arr = {};
         for (let i = 0; i < this.tasks.length; i++) {
@@ -509,8 +600,9 @@ export default {
             continue;
           }
           for (let j of e[this.teams[i].id].results) {
-            this.resultsTable[arr[j.taskInfo.id]][i] = j.result;
-            this.copyResultsTable[arr[j.taskInfo.id]][i] = j.result;
+            let dlt = j.result === 0? '' : j.result;
+            this.resultsTable[arr[j.taskInfo.id]][i] = dlt;
+            this.copyResultsTable[arr[j.taskInfo.id]][i] = dlt;
           }
         }
         this.show_table = true;
@@ -518,6 +610,9 @@ export default {
     },
 
     async update_element(team_id, task_id, val) {
+      if (!val) {
+        val = 0;
+      }
       let flag = false;
       let res = await fetch(`https://back.is57.ru/results/set?token=${this.token}&team_id=${team_id}&task_id=${task_id}&value=${val}`);
       if (await res.text() === 'invalid token') {
@@ -541,6 +636,9 @@ export default {
         this.resultsTable[task_ind][team_ind] = val;
         this.copyResultsTable[task_ind][team_ind] = val;
       }
+      this.results = await this.getResultList().then((e) => {
+        this.rebuild(e);
+      })
     },
     rebuild(e) {
       let width = this.teams.length;
@@ -550,6 +648,10 @@ export default {
       for (let i = 0; i < height; i++) {
         this.resultsTable[i] = new Array(width);
         this.copyResultsTable[i] = new Array(width);
+        for (let j = 0; j < width; j++) {
+          this.resultsTable[i][j] = '';
+          this.copyResultsTable[i][j] = '';
+        }
       }
       let arr = {};
       for (let i = 0; i < this.tasks.length; i++) {
@@ -560,14 +662,35 @@ export default {
           continue;
         }
         for (let j of e[this.teams[i].id].results) {
-          this.resultsTable[arr[j.taskInfo.id]][i] = j.result;
-          this.copyResultsTable[arr[j.taskInfo.id]][i] = j.result;
+          let dlt = j.result === 0? '' : j.result;
+          this.resultsTable[arr[j.taskInfo.id]][i] = dlt;
+          this.copyResultsTable[arr[j.taskInfo.id]][i] = dlt;
         }
       }
     },
   },
 
   async mounted() {
+    if (!localStorage.getItem('passed')) {
+      this.open_instruction();
+    }
+
+    for (let i = 'a'.charCodeAt(0); i <= 'z'.charCodeAt(0); i++) {
+      this.legalSymbols.push(String.fromCharCode(i));
+    }
+    for (let i = 'A'.charCodeAt(0); i <= 'Z'.charCodeAt(0); i++) {
+      this.legalSymbols.push(String.fromCharCode(i));
+    }
+    for (let i = '0'.charCodeAt(0); i <= '9'.charCodeAt(0); i++) {
+      this.legalSymbols.push(String.fromCharCode(i));
+    }
+    for (let i = 'а'.charCodeAt(0); i <= 'я'.charCodeAt(0); i++) {
+      this.legalSymbols.push(String.fromCharCode(i));
+    }
+    for (let i = 'А'.charCodeAt(0); i <= 'Я'.charCodeAt(0); i++) {
+      this.legalSymbols.push(String.fromCharCode(i));
+    }
+
     if (localStorage['token']) {
       this.token = localStorage['token'];
     }
@@ -731,6 +854,7 @@ button {
   width: 5px;
   height: 5px;
 }
+
 .table-res::-webkit-scrollbar-track {
   background-color: white;
   color: #2c3e50;
@@ -807,14 +931,59 @@ input[type="number"]:focus {
   font-size: 30px;
 }
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 600px) {
   .field3 {
     width: 80%;
     height: 380px;
   }
+
   .scrolly {
     height: 250px;
   }
+}
+
+.help {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+}
+
+
+.display-block {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 57;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(44, 62, 80, 0.24);
+}
+
+.help-cont {
+  position: fixed;
+  background-color: white;
+  left: 50%;
+  top: 50%;
+  width: 500px;
+  max-width: 90%;
+  height: 700px;
+  max-height: 75%;
+  transform: translate(-50%, -50%);
+  overflow-y: scroll;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.help-cont p {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.kek {
+  margin-top: 3px;
+  margin-bottom: 3px;
+  font-size: 15px;
 }
 
 </style>
