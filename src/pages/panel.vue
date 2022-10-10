@@ -2,7 +2,10 @@
   <div class="cont">
     <div class="display-block" v-show="isInstructionOpen">
       <div class="help-cont">
-        <h2>🌈Инструкция🌈</h2>
+        <div class="fonkey-monkey">
+          <button id="btn228" @click="close_instruction">Закрыть</button>
+        </div>
+        <h2>🌈 Инструкция 🌈</h2>
         <p>Основной сайт находится на <a href="https://is57.ru">is57.ru</a></p>
 
         <p>Панель администраторов находится на сайте <a href="https://admin.is57.ru">admin.is57.ru</a>.
@@ -53,7 +56,6 @@
           <a href="https://t.me/CHUBBY_D" class="kek">@CHUBBY_D - Илья</a>
           <a href="https://t.me/whotegsthatdies" class="kek">@whotegsthatdies - Даня</a>
         </p>
-        <button @click="close_instruction">Закрыть</button>
       </div>
     </div>
     <div class="help">
@@ -986,4 +988,17 @@ input[type="number"]:focus {
   font-size: 15px;
 }
 
+.fonkey-monkey {
+  position: sticky;
+  display: flex;
+  justify-content: flex-start;
+  top: 0px;
+}
+#btn228 {
+  font-size: 17px;
+  font-weight: 800;
+  background-color: #2c3e50;
+  color: white;
+  padding: 5px 10px;
+}
 </style>
